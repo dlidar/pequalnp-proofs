@@ -415,4 +415,57 @@ theorem two_factor_cost {ι : Type*} [DecidableEq ι] (F : Finset ι) (color : �
   intro p hp i hi mem h
   exact Bool.noConfusion (h.1.symm.trans h.2)
 
+-- A factor is additive in the point inputs when each acceptance already has
+-- a single-point witness on the same line set. Its dependence on the line
+-- inputs can be arbitrary. For two such factors, one can replace the final
+-- AND by an OR after routing each point to just one of the factors.
+theorem partition_factors (f : Bool → Side → Side → Bool)
+    (point_witness : ∀ c A B, f c A B = true ↔ ∃ p ∈ A, f c {p} B = true)
+    (line_mono : ∀ c p {B B' : Side}, B ⊆ B' → f c {p} B = true → f c {p} B' = true)
+    (on : ∀ p l, inc p l → ∀ c, f c {p} {l} = true)
+    (off : ∀ p, (f false {p} (avoid {p}) && f true {p} (avoid {p})) = false) :
+    ∃ tag : Fin 13 → Bool,
+      ∀ A B : Side,
+        ((f false (A.filter (fun p => tag p = false)) B ||
+          f true (A.filter (fun p => tag p = true)) B) = true) ↔
+        ∃ p ∈ A, ∃ l ∈ B, inc p l := by
+  let tag (p : Fin 13) := f false {p} (avoid {p})
+  have safe (p : Fin 13) : f (tag p) {p} (avoid {p}) = false := by
+    have h := off p
+    change f (f false {p} (avoid {p})) {p} (avoid {p}) = false
+    cases eq : f false {p} (avoid {p})
+    · exact eq
+    · simpa only [eq,Bool.true_and] using h
+  have row (p : Fin 13) (B : Side) : f (tag p) {p} B = true ↔ ∃ l ∈ B, inc p l := by
+    constructor
+    · intro accept
+      by_contra none
+      push Not at none
+      have sub : B ⊆ avoid {p} := fun l hl => by
+        simpa [avoid] using none l hl
+      have yes := line_mono (tag p) p sub accept
+      rw [safe] at yes
+      contradiction
+    · rintro ⟨l,hl,e⟩
+      exact line_mono (tag p) p (Finset.singleton_subset_iff.mpr hl) (on p l e _)
+  refine ⟨tag,?_⟩
+  intro A B
+  have forward (c : Bool) (h : f c (A.filter (fun p => tag p = c)) B = true) :
+      ∃ p ∈ A, ∃ l ∈ B, inc p l := by
+    obtain ⟨p,mem,accept⟩ := (point_witness _ _ _).mp h
+    obtain ⟨hp,eq⟩ := Finset.mem_filter.mp mem
+    exact ⟨p,hp,(row p B).mp (eq.symm ▸ accept)⟩
+  rw [Bool.or_eq_true]
+  constructor
+  · rintro (h|h)
+    · exact forward false h
+    · exact forward true h
+  · rintro ⟨p,hp,e⟩
+    have gt := (row p B).mpr e
+    have h := (point_witness (tag p) (A.filter (fun q => tag q = tag p)) B).mpr
+      ⟨p,Finset.mem_filter.mpr ⟨hp,rfl⟩,gt⟩
+    cases eq : tag p with
+    | false => exact Or.inl (by simpa only [eq] using h)
+    | true => exact Or.inr (by simpa only [eq] using h)
+
 end PEqualNP.Research.PlaneTests
