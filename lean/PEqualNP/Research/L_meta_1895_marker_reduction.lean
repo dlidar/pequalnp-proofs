@@ -514,4 +514,19 @@ theorem exact_alternatives : Posted ↔
     · obtain ⟨D,okD,ds,fnD,hitD⟩ := normalize_witness C ok fn x ind hit
       exact posted_iff.mpr ⟨D,okD,by omega,fnD,hitD⟩
 
+-- Each of the 42 tests has a pair of inputs found in no other test.
+-- A circuit consisting of their conjunction shows that dropping this test
+-- loses the ability to detect all conjunctions on independent inputs.
+def privateLeft (k : Fin 21) (d : Bool) : Fin 42 :=
+  if d then ⟨21 + k.val,by omega⟩ else ⟨(21-k.val)%21,by omega⟩
+
+def privateRight (k : Fin 21) (d : Bool) : Fin 42 :=
+  if d then ⟨21 + (k.val+3)%21,by omega⟩ else ⟨(39-k.val)%21,by omega⟩
+
+set_option maxRecDepth 10000 in
+set_option maxHeartbeats 1000000 in
+theorem unique_test : ∀ (k : Fin 21) (d : Bool) (k' : Fin 21) (d' : Bool),
+    (markedAt k' d' (privateLeft k d) = true ∧ markedAt k' d' (privateRight k d) = true)
+      ↔ (k' = k ∧ d' = d) := by decide
+
 end MarkedWitness
