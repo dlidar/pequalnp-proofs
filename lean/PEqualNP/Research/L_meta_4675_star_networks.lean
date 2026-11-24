@@ -1,3 +1,4 @@
+import Mathlib.Combinatorics.Hall.Finite
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Data.Finset.Union
 import Mathlib.Tactic
@@ -11,9 +12,12 @@ For a disjunction of sound rectangles, shared OR preprocessing still costs
 enough to obtain the edge-plus-cover lower bound. For nested monotone operands
 whose conjunction implies the target, their off-target pair sets must satisfy
 a crossing condition. An off-target rectangle on one side confines all
-opposite off-target pairs to one row and one column. The example at the end
-shows that two covering vertices can be necessary. Neither result supplies
-the gate-count argument for unrestricted nesting.
+opposite off-target pairs to one row and one column. More generally one
+operand has a cover of at most four vertices for its off-target pairs.
+Two operands cannot both have five disjoint off-target pairs: two-colouring
+the 5 by 5 crossing grid would force a target four-cycle. An explicit
+pair of graph operands needs all four covering vertices on each side.
+The gate-count argument for unrestricted nesting remains open.
 
 The full circuit evaluator is used in the endpoint bound, the monotone-wire
 result, and the matching example. The project also treats pair-clean circuits
@@ -605,6 +609,236 @@ theorem sound_wire_pair_dichotomy {p l} (E : Finset (Fin p × Fin l)) (no4 : fou
     fourFree (footprint p l C u \ E) ∨ fourFree (footprint p l C v \ E) :=
   cross_dichotomy E _ _ no4 (sound_wire_cross E C hC u v sound)
 
+-- For any sound AND, removing at most six input vertices clears every
+-- off-target point-line pair from at least one operand. Three independent
+-- errors on one side force the six covering vertices on the opposite side.
+def smallCover {p l} (H : Finset (Fin p × Fin l)) (k : ℕ) : Prop :=
+  ∃ (R : Finset (Fin p)) (B : Finset (Fin l)), R.card + B.card ≤ k ∧
+    ∀ i j, (i,j) ∈ H → i ∈ R ∨ j ∈ B
+
+theorem triple_cross_cover {p l} (E F G : Finset (Fin p × Fin l)) (no4 : fourFree E)
+    (cross : ∀ a b c d, (a,b) ∈ F → (a,b) ∉ E → (c,d) ∈ G → (c,d) ∉ E →
+      (a,d) ∈ E ∨ (c,b) ∈ E)
+    {a c e : Fin p} {b d f : Fin l} (ac : a ≠ c) (ae : a ≠ e) (ce : c ≠ e)
+    (bd : b ≠ d) (bf : b ≠ f) (df : d ≠ f)
+    (ab : (a,b) ∈ F \ E) (cd : (c,d) ∈ F \ E) (ef : (e,f) ∈ F \ E) :
+    smallCover (G \ E) 6 := by
+  classical
+  let row := fun (x y : Fin l) => univ.filter fun i : Fin p => (i,x) ∈ E ∧ (i,y) ∈ E
+  let col := fun (x y : Fin p) => univ.filter fun j : Fin l => (x,j) ∈ E ∧ (y,j) ∈ E
+  have hr (x y : Fin l) (ne : x ≠ y) : (row x y).card ≤ 1 := by
+    apply card_le_one.mpr
+    intro i hi k hk
+    obtain ⟨_,hix,hiy⟩ := mem_filter.mp hi
+    obtain ⟨_,hkx,hky⟩ := mem_filter.mp hk
+    by_contra dik
+    exact no4 i k x y dik ne ⟨hix,hiy,hkx,hky⟩
+  have hc (x y : Fin p) (ne : x ≠ y) : (col x y).card ≤ 1 := by
+    apply card_le_one.mpr
+    intro j hj k hk
+    obtain ⟨_,hxj,hyj⟩ := mem_filter.mp hj
+    obtain ⟨_,hxk,hyk⟩ := mem_filter.mp hk
+    by_contra djk
+    exact no4 x y j k ne djk ⟨hxj,hxk,hyj,hyk⟩
+  refine ⟨row b d ∪ row b f ∪ row d f,col a c ∪ col a e ∪ col c e,?_,?_⟩
+  · have bound {α : Type} [DecidableEq α] (X Y Z : Finset α)
+        (hx : X.card ≤ 1) (hy : Y.card ≤ 1) (hz : Z.card ≤ 1) :
+        (X ∪ Y ∪ Z).card ≤ 3 := by
+      have := card_union_le X Y
+      have := card_union_le (X ∪ Y) Z
+      omega
+    exact Nat.add_le_add (bound _ _ _ (hr _ _ bd) (hr _ _ bf) (hr _ _ df))
+      (bound _ _ _ (hc _ _ ac) (hc _ _ ae) (hc _ _ ce))
+  · intro i j hij
+    obtain ⟨pos,off⟩ := mem_sdiff.mp hij
+    have h1 := cross a b i j (mem_sdiff.mp ab).1 (mem_sdiff.mp ab).2 pos off
+    have h2 := cross c d i j (mem_sdiff.mp cd).1 (mem_sdiff.mp cd).2 pos off
+    have h3 := cross e f i j (mem_sdiff.mp ef).1 (mem_sdiff.mp ef).2 pos off
+    simp only [mem_union,row,col,mem_filter,mem_univ,true_and]
+    tauto
+
+-- Either two independent off-target pairs are maximal (their four
+-- endpoints cover the relation), or a third disjoint pair can be chosen.
+theorem sparse_operand {p l} (E F G : Finset (Fin p × Fin l)) (no4 : fourFree E)
+    (cross : ∀ a b c d, (a,b) ∈ F → (a,b) ∉ E → (c,d) ∈ G → (c,d) ∉ E →
+      (a,d) ∈ E ∨ (c,b) ∈ E) :
+    smallCover (F \ E) 4 ∨ smallCover (G \ E) 6 := by
+  classical
+  by_cases hex : ∃ a b, (a,b) ∈ F \ E
+  · obtain ⟨a,b,ab⟩ := hex
+    by_cases more : ∃ c d, (c,d) ∈ F \ E ∧ a ≠ c ∧ b ≠ d
+    · obtain ⟨c,d,cd,ac,bd⟩ := more
+      by_cases third : ∃ e f, (e,f) ∈ F \ E ∧ a ≠ e ∧ c ≠ e ∧ b ≠ f ∧ d ≠ f
+      · obtain ⟨e,f,ef,ae,ce,bf,df⟩ := third
+        exact Or.inr (triple_cross_cover _ _ _ no4 cross ac ae ce bd bf df ab cd ef)
+      · left
+        refine ⟨{a,c},{b,d},?_,?_⟩
+        · simp [ac,bd]
+        · intro i j hij
+          simp only [mem_insert,mem_singleton]
+          by_contra! h
+          exact third ⟨i,j,hij,Ne.symm h.1.1,Ne.symm h.1.2,Ne.symm h.2.1,Ne.symm h.2.2⟩
+    · left
+      refine ⟨{a},{b},by simp,?_⟩
+      intro i j hij
+      simp only [mem_singleton]
+      by_contra! h
+      exact more ⟨i,j,hij,Ne.symm h.1,Ne.symm h.2⟩
+  · left
+    exact ⟨∅,∅,by simp,fun i j h => False.elim (hex ⟨i,j,h⟩)⟩
+
+theorem sound_wire_sparse_operand {p l} (E : Finset (Fin p × Fin l)) (no4 : fourFree E)
+    (C : Circuit) (hC : IsMonotoneCircuit C) (u v : ℕ)
+    (sound : ∀ P L, wireAccepts C u P L → wireAccepts C v P L →
+       ∃ a ∈ P, ∃ b ∈ L, (a,b) ∈ E) :
+    smallCover (footprint p l C u \ E) 4 ∨ smallCover (footprint p l C v \ E) 6 :=
+  sparse_operand E _ _ no4 (sound_wire_cross E C hC u v sound)
+
+-- Mask bit j records the colour of column j. Two row masks can coexist
+-- only if they have at most one common one and at most one common zero.
+def rowBit (x : Fin 32) (j : Fin 5) : Bool := x.val.testBit j.val
+def encodeRow (m : Fin 5 → Bool) : Fin 32 :=
+  ⟨(m 0).toNat + 2*(m 1).toNat + 4*(m 2).toNat + 8*(m 3).toNat + 16*(m 4).toNat,
+   by have := (m 0).toNat_le; have := (m 1).toNat_le; have := (m 2).toNat_le
+      have := (m 3).toNat_le; have := (m 4).toNat_le; omega⟩
+
+theorem row_roundtrip (m : Fin 5 → Bool) (j : Fin 5) : rowBit (encodeRow m) j = m j := by
+  fin_cases j <;> simp only [rowBit,encodeRow] <;>
+    cases h0 : m 0 <;> cases h1 : m 1 <;> cases h2 : m 2 <;> cases h3 : m 3 <;> cases h4 : m 4 <;>
+    first | exact h0.symm | exact h1.symm | exact h2.symm | exact h3.symm | exact h4.symm
+
+def compatibleRows (x y : Fin 32) : Bool :=
+  let a := x.val &&& y.val
+  let b := (31-x.val) &&& (31-y.val)
+  (a &&& (a-1) == 0) && (b &&& (b-1) == 0)
+
+set_option maxRecDepth 16000 in
+set_option maxHeartbeats 1000000 in
+theorem compatible_iff : ∀ x y : Fin 32, compatibleRows x y = true ↔
+    ∀ i j : Fin 5, i ≠ j → ¬ (rowBit x i = rowBit x j ∧ rowBit x j = rowBit y i ∧
+        rowBit y i = rowBit y j) := by decide +kernel
+
+set_option maxRecDepth 16000 in
+set_option maxHeartbeats 1800000 in
+theorem incompatible_five :
+  ∀ x y : Fin 32, compatibleRows x y = true →
+  ∀ z : Fin 32, compatibleRows x z = true → compatibleRows y z = true →
+  ∀ u : Fin 32, compatibleRows x u = true → compatibleRows y u = true → compatibleRows z u = true →
+  ∀ v : Fin 32, compatibleRows x v = true → compatibleRows y v = true → compatibleRows z v = true →
+      compatibleRows u v = false := by decide +kernel
+
+theorem monochrome_five (M : Fin 5 → Fin 5 → Bool) :
+    ∃ i k j m, i ≠ k ∧ j ≠ m ∧ M i j = M i m ∧ M i m = M k j ∧ M k j = M k m := by
+  by_contra! bad
+  have h (i k : Fin 5) (ne : i ≠ k) :
+      compatibleRows (encodeRow (M i)) (encodeRow (M k)) = true := by
+    apply (compatible_iff _ _).mpr
+    intro j m diff rect
+    simp only [row_roundtrip] at rect
+    exact bad i k j m ne diff rect.1 rect.2.1 rect.2.2
+  have impossible := incompatible_five _ _ (h 0 1 (by decide)) _ (h 0 2 (by decide))
+    (h 1 2 (by decide)) _ (h 0 3 (by decide)) (h 1 3 (by decide)) (h 2 3 (by decide))
+    _ (h 0 4 (by decide)) (h 1 4 (by decide)) (h 2 4 (by decide))
+  simp [h 3 4 (by decide)] at impossible
+
+-- A matching of five false-positive pairs on each operand would colour
+-- a 5 by 5 grid by the direction of the forced target cross edge. Either
+-- colour of monochromatic rectangle then violates four-freeness.
+def hasFiveMatching {p l} (H : Finset (Fin p × Fin l)) : Prop :=
+  ∃ (a : Fin 5 → Fin p) (b : Fin 5 → Fin l), Function.Injective a ∧ Function.Injective b ∧
+    ∀ i, (a i,b i) ∈ H
+
+theorem cross_matching_limit {p l} (E F G : Finset (Fin p × Fin l)) (no4 : fourFree E)
+    (cross : ∀ a b c d, (a,b) ∈ F → (a,b) ∉ E → (c,d) ∈ G → (c,d) ∉ E →
+      (a,d) ∈ E ∨ (c,b) ∈ E) :
+    ¬ (hasFiveMatching (F \ E) ∧ hasFiveMatching (G \ E)) := by
+  classical
+  rintro ⟨⟨a,b,ia,ib,ab⟩,⟨c,d,ic,id',cd⟩⟩
+  let M (i j : Fin 5) := decide ((a i,d j) ∈ E)
+  have red (i j) (h : M i j = true) : (a i,d j) ∈ E := of_decide_eq_true h
+  have blue (i j) (h : M i j = false) : (c j,b i) ∈ E := by
+    obtain ⟨hab,nab⟩ := mem_sdiff.mp (ab i)
+    obtain ⟨hcd,ncd⟩ := mem_sdiff.mp (cd j)
+    exact (cross _ _ _ _ hab nab hcd ncd).resolve_left (of_decide_eq_false h)
+  obtain ⟨i,k,j,m,ik,jm,s,t,u⟩ := monochrome_five M
+  cases h : M i j with
+  | true =>
+    exact no4 _ _ _ _ (ia.ne ik) (id'.ne jm)
+      ⟨red i j h,red i m (s ▸ h),red k j (t ▸ s ▸ h),red k m (u ▸ t ▸ s ▸ h)⟩
+  | false =>
+    exact no4 _ _ _ _ (ic.ne jm) (ib.ne ik)
+      ⟨blue i j h,blue k j (t ▸ s ▸ h),blue i m (s ▸ h),blue k m (u ▸ t ▸ s ▸ h)⟩
+
+theorem sound_wire_matching_limit {p l} (E : Finset (Fin p × Fin l)) (no4 : fourFree E)
+    (C : Circuit) (hC : IsMonotoneCircuit C) (u v : ℕ)
+    (sound : ∀ P L, wireAccepts C u P L → wireAccepts C v P L →
+       ∃ a ∈ P, ∃ b ∈ L, (a,b) ∈ E) :
+    ¬ (hasFiveMatching (footprint p l C u \ E) ∧ hasFiveMatching (footprint p l C v \ E)) :=
+  cross_matching_limit E _ _ no4 (sound_wire_cross E C hC u v sound)
+
+-- Hall's theorem with p-5 dummy line vertices. Unless four vertices
+-- cover H, an injection from the p point vertices into augmented
+-- neighbourhoods must use at least five distinct real line vertices.
+theorem four_cover_of_no_five {p l} (H : Finset (Fin p × Fin l)) (none : ¬hasFiveMatching H) :
+    smallCover H 4 := by
+  classical
+  by_contra noCover
+  let N (i : Fin p) := univ.filter fun j : Fin l => (i,j) ∈ H
+  have deficient (s : Finset (Fin p)) : 5 ≤ p - s.card + (s.biUnion N).card := by
+    by_contra! small
+    apply noCover
+    refine ⟨univ \ s,s.biUnion N,?_,?_⟩
+    · simpa [card_sdiff_of_subset (subset_univ s)] using (show _ ≤ 4 by omega : p - s.card + (s.biUnion N).card ≤ 4)
+    · intro i j h
+      by_cases hi : i ∈ s
+      · exact Or.inr (mem_biUnion.mpr ⟨i,hi,mem_filter.mpr ⟨mem_univ _,h⟩⟩)
+      · exact Or.inl (by simpa using hi)
+  have hp : 5 ≤ p := by simpa using deficient ∅
+  let T (i : Fin p) := (N i).disjSum (univ : Finset (Fin (p-5)))
+  have hall (s : Finset (Fin p)) : s.card ≤ (s.biUnion T).card := by
+    rcases s.eq_empty_or_nonempty with rfl|⟨z,hz⟩
+    · simp
+    · have eq : s.biUnion T = (s.biUnion N).disjSum (univ : Finset (Fin (p-5))) := by
+        ext v
+        cases v with
+        | inl j => simp [T]
+        | inr d =>
+          simp [T]
+          exact ⟨z,hz⟩
+      rw [eq,card_disjSum,card_univ,Fintype.card_fin]
+      have := deficient s
+      have hs : s.card ≤ p := by simpa using card_le_univ s
+      omega
+  obtain ⟨f,hf,member⟩ := (all_card_le_biUnion_card_iff_existsInjective' T).mp hall
+  let U := univ.image f
+  have size : U.card = p := by simp [U,card_image_of_injective _ hf]
+  have cap : U.toRight.card ≤ p-5 := by simpa using card_le_univ U.toRight
+  have split : U.toLeft.card + U.toRight.card = U.card := card_toLeft_add_card_toRight
+  have five : 5 ≤ U.toLeft.card := by omega
+  let b := U.toLeft.orderEmbOfCardLe five
+  have pick (i : Fin 5) : ∃ a, f a = Sum.inl (b i) := by
+    have hit := mem_toLeft.mp (U.toLeft.orderEmbOfCardLe_mem five i)
+    obtain ⟨a,_,ha⟩ := mem_image.mp hit
+    exact ⟨a,ha⟩
+  choose a ha using pick
+  apply none
+  refine ⟨a,b,?_,b.injective,?_⟩
+  · intro i j same
+    exact b.injective (Sum.inl.inj ((ha i).symm.trans ((congrArg f same).trans (ha j))))
+  · intro i
+    have h := member (a i)
+    rw [ha] at h
+    exact (mem_filter.mp (inl_mem_disjSum.mp h)).2
+
+theorem sound_wire_four_vertex_cover {p l} (E : Finset (Fin p × Fin l)) (no4 : fourFree E)
+    (C : Circuit) (hC : IsMonotoneCircuit C) (u v : ℕ)
+    (sound : ∀ P L, wireAccepts C u P L → wireAccepts C v P L →
+       ∃ a ∈ P, ∃ b ∈ L, (a,b) ∈ E) :
+    smallCover (footprint p l C u \ E) 4 ∨ smallCover (footprint p l C v \ E) 4 := by
+  by_cases h : hasFiveMatching (footprint p l C u \ E)
+  · exact Or.inr (four_cover_of_no_five _ (fun hv => sound_wire_matching_limit E no4 C hC u v sound ⟨h,hv⟩))
+  · exact Or.inl (four_cover_of_no_five _ h)
+
 -- An exact nested AND for a matching. Each of its two children also accepts
 -- one different off-diagonal edge. This rules out replacing every nested
 -- AND by either child. The example satisfies the assigned gate restrictions.
@@ -648,5 +882,66 @@ theorem two_vertex_bound_sharp :
     have one := card_le_one.mp (show S.card ≤ 1 by omega)
     rcases h with h|h <;> rcases k with k|k <;>
       exact (by decide : _ ≠ _) (one _ h _ k)
+
+-- Sharpness of the matching bound. Across the two sets of four pairs,
+-- the target's first cross block is an 8-cycle. The other cross block is
+-- its transposed bipartite complement, another 8-cycle.
+def fourMatchE : Finset (Fin 8 × Fin 8) :=
+  univ.filter fun e =>
+    let i := e.1.val
+    let j := e.2.val
+    (i < 4 ∧ 4 ≤ j ∧ (j%4 = i ∨ j%4 = (i+1)%4)) ∨
+    (4 ≤ i ∧ j < 4 ∧ i%4 ≠ j ∧ i%4 ≠ (j+1)%4)
+
+def fourMatchF : Finset (Fin 8 × Fin 8) :=
+  fourMatchE ∪ {(0,0),(1,1),(2,2),(3,3)}
+
+def fourMatchG : Finset (Fin 8 × Fin 8) :=
+  fourMatchE ∪ {(4,4),(5,5),(6,6),(7,7)}
+
+theorem four_matching_sharp :
+    fourFree fourMatchE ∧
+    (∀ P L, (hits fourMatchF P L ∧ hits fourMatchG P L) ↔ hits fourMatchE P L) ∧
+    (∃ a b : Fin 4 → Fin 8, Function.Injective a ∧ Function.Injective b ∧
+      ∀ i, (a i,b i) ∈ fourMatchF \ fourMatchE) ∧
+    (∃ c d : Fin 4 → Fin 8, Function.Injective c ∧ Function.Injective d ∧
+      ∀ i, (c i,d i) ∈ fourMatchG \ fourMatchE) := by
+  let a : Fin 4 → Fin 8 := Fin.castAdd 4
+  let c : Fin 4 → Fin 8 := Fin.natAdd 4
+  have ia : Function.Injective a := Fin.castAdd_injective _ _
+  have ic : Function.Injective c := Fin.natAdd_injective _ _
+  refine ⟨?_,(nested_and_exact _ _ _).mpr ?_,⟨a,a,ia,ia,?_⟩,⟨c,c,ic,ic,?_⟩⟩
+  · unfold fourFree
+    decide +kernel
+  · decide +kernel
+  · decide +kernel
+  · decide +kernel
+
+theorem matching_le_cover {p l m k} (H : Finset (Fin p × Fin l))
+    (a : Fin m → Fin p) (b : Fin m → Fin l) (ia : Function.Injective a) (ib : Function.Injective b)
+    (edges : ∀ i, (a i,b i) ∈ H) (cov : smallCover H k) : m ≤ k := by
+  classical
+  obtain ⟨R,B,cap,cover⟩ := cov
+  let A := univ.filter fun i => a i ∈ R
+  have hR : A.image a ⊆ R := by
+    intro x hx
+    obtain ⟨i,hi,rfl⟩ := mem_image.mp hx
+    exact (mem_filter.mp hi).2
+  have hB : (univ \ A).image b ⊆ B := by
+    intro y hy
+    obtain ⟨i,hi,rfl⟩ := mem_image.mp hy
+    apply (cover _ _ (edges i)).resolve_left
+    exact fun hr => (mem_sdiff.mp hi).2 (mem_filter.mpr ⟨mem_univ _,hr⟩)
+  have r := card_le_card hR
+  have d := card_le_card hB
+  rw [card_image_of_injective _ ia] at r
+  rw [card_image_of_injective _ ib,card_sdiff_of_subset (subset_univ A),card_univ,Fintype.card_fin] at d
+  omega
+
+theorem four_vertex_bound_sharp :
+    ¬ smallCover (fourMatchF \ fourMatchE) 3 ∧ ¬ smallCover (fourMatchG \ fourMatchE) 3 := by
+  obtain ⟨_,_,⟨a,b,ha,hb,left⟩,⟨c,d,hc,hd,right⟩⟩ := four_matching_sharp
+  exact ⟨fun h => (by decide : ¬4 ≤ 3) (matching_le_cover _ _ _ ha hb left h),
+    fun h => (by decide : ¬4 ≤ 3) (matching_le_cover _ _ _ hc hd right h)⟩
 
 end PEqualNP.Research.StarNetworks
