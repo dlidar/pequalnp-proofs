@@ -1,0 +1,92 @@
+[
+  {
+    "centers": [
+      0,
+      1
+    ],
+    "profiles": [
+      1,
+      2
+    ],
+    "inputs": 4,
+    "gates": 2,
+    "sample_count": 16,
+    "additions": 450,
+    "cnf_sha256": "d0c674a02cefd87d44d75d7e4baaddac2686c7cdf72e7c9f78daf4e02d7c4fe4",
+    "proof_sha256": "37b13905277a76bbc50fbf95644b7f946116afc76d316dcea0ea7f387aec2aaa"
+  },
+  {
+    "centers": [
+      0,
+      2
+    ],
+    "profiles": [
+      1,
+      2,
+      3
+    ],
+    "inputs": 5,
+    "gates": 4,
+    "sample_count": 24,
+    "additions": 3159,
+    "cnf_sha256": "8f93136335511422b29ade2a111ad4d77b7473833de991356737074747f4b4d6",
+    "proof_sha256": "db157a7e16ad8a0920850420b642b4ef9b92d4f2acce5e32cea0484008aeb04c"
+  },
+  {
+    "centers": [
+      0,
+      1,
+      4
+    ],
+    "profiles": [
+      1,
+      2,
+      4
+    ],
+    "inputs": 6,
+    "gates": 4,
+    "sample_count": 40,
+    "additions": 4464,
+    "cnf_sha256": "f968a9bd4d2ad143ab5398bc7044501cbd2a9ba5a2d0fdb0ac8d494d363aa3af",
+    "proof_sha256": "effba2ba4484c6ac2017b2546111c0ec4d627eee72a86ee8b07a178aafc4ea4f"
+  },
+  {
+    "centers": [
+      0,
+      2,
+      7
+    ],
+    "profiles": [
+      1,
+      2,
+      4,
+      7
+    ],
+    "inputs": 7,
+    "gates": 7,
+    "sample_count": 48,
+    "additions": 475030,
+    "cnf_sha256": "9163da8c4e72319b3c55ebcc3b63cd293d897a594958791ad3c94fce990e76da",
+    "proof_sha256": "8ba768fbb1daa828438962fda27a77b4d07060e8bacaea14c8e4fef32640ad0f"
+  },
+  {
+    "centers": [
+      0,
+      1,
+      4,
+      14
+    ],
+    "profiles": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "inputs": 8,
+    "gates": 6,
+    "sample_count": 65,
+    "additions": 69216,
+    "cnf_sha256": "3bf4cdbec7673288e6376b8b28ccc14fd161e392f8928107b383fa1fa74c07a5",
+    "proof_sha256": "7aa67cab7108e1eefdeaead01261aa5c8906f7f7af14fb416317fda095bdb49a"
+  }
+]
