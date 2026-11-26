@@ -8,3 +8,7 @@ The target is the 8 by 8 matrix with mask 14466700110149527140 on inputs consist
 * The general 23-gate question remains separate. search.py generates the unrestricted encoding and tests a fixed positive control. repair.py limits changes to the checked near circuit. Timeouts give no exclusion.
 
 Build each Lean file in the pinned project environment (Lean 4.36.0). Numerical scripts require Python; the optimization scripts additionally require NumPy, SciPy and CaDiCaL. q24.txt stores the 24-gate seed for bypass.cpp in OR=1, AND=0 format.
+
+The six merged signals in Quotient24.lean leave ten decoder inputs. In the model where the decoder first forms arbitrary shared OR groups, then products of two groups, then their final OR, its minimum is exactly 18 further gates. quotient-bound.py includes all 117 ordered-by-mask nonempty sound products and all 60 possibly needed nonsingleton groups. It includes ORs of overlapping proper subgroups and redundant labels. Every individual label hits a negative, so the operands of a sound product are disjoint. The 17-decoder-gate refutation has 27,888 independently checked RUP additions. Thus the 24-gate upper circuit is optimal in this fixed six-pair, two-factor decoder model.
+
+ForcedOr.lean proves that a single nonincident merged row and column must send their OR, for any monotone one-bit encoder followed by a monotone decoder with the remaining raw inputs. Positive/negative input pairs with ordered remaining inputs force the values at (1,0), (0,1) and (0,0); monotonicity fixes (1,1).
