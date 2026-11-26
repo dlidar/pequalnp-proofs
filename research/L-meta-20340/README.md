@@ -8,3 +8,5 @@ The posted 8 by 8 matrix has 24 edges. Inputs are promised to contain exactly on
 * The unrestricted 24-gate existence claim is separate from these bounds. search.py encodes the full 64-row promise and checks its 28-gate control before searching.
 
 Run verify.sh with the project's pinned Lean 4.36.0, Mathlib and PEqualNP.Defs.Represents in LEAN_PATH. The restricted SAT replay also needs Python, NumPy, SciPy and CaDiCaL on PATH.
+
+At a budget of 24 gates, the sharp fewest missed positive cells in this rectangle model with no false positives is three. Near.lean checks an attaining 23-gate circuit. near_bound.py adds one coverage-slack variable per edge to the exact model and permits at most two misses. check_rup.py independently verified all 99,075 RUP additions ending in the empty clause. The hashes of the generated CNF and proof are in near-certificate-sha256.txt.
