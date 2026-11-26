@@ -1,0 +1,17 @@
+import SplitCore
+namespace PlaneMask
+def rules2 : List Rule := [⟨39,23,24,32,0xff000000ff000000ff000000ff000000ff000000ff000000ff000000ff000000,0xffffffffffffffffffffffffffffffff⟩,
+⟨53,49,45,5,0xffffffff000000000000000000000000ffffffff00000000,0xffffffff00000000ffffffff00000000ffffffff00000000ffffffff00000000⟩,
+⟨19,17,59,3,0xf0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f00000000000000000000000000000000,0xff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00ff00⟩,
+⟨45,40,53,5,0xffffffff000000000000000000000000ffffffff0000000000000000,0xffffffff00000000ffffffff00000000ffffffff00000000ffffffff00000000⟩,
+⟨15,23,14,8,0xcccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc,0xffffffffffffffff0000000000000000⟩,
+⟨59,3,60,56,0xffffffffffffffffffffffffffffffff00000000000000000000000000000000,0xff000000ff000000ff000000ff000000ff000000ff000000ff000000ff0000⟩,
+⟨14,8,7,6,0x3333333333333333333333333333333333333333333333333333333333333333,0xffffffffffffffff000000000000000000000000000000000000000000000000⟩,
+⟨19,17,9,11,0xf0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f,0xcc00cc00cc00cc00cc00cc00cc00cc00cc00cc00cc00cc00cc00cc00cc00cc00⟩,
+⟨45,5,2,42,0xaaaaaaaa00000000aaaaaaaa00000000aaaaaaaa00000000aaaaaaaa00000000,0xffffffff00000000ffffffff00000000ffffffff00000000ffffffff⟩,
+⟨53,5,2,50,0xaaaaaaaaaaaaaaaa0000000000000000aaaaaaaaaaaaaaaa0000000000000000,0xffffffff00000000ffffffff00000000ffffffff00000000ffffffff⟩]
+set_option maxRecDepth 32000 in
+set_option maxHeartbeats 12000000 in
+theorem certified2 : rules2.all (fun t => decide (Valid t)) = true := by decide +kernel
+end PlaneMask
+#print axioms PlaneMask.certified2
