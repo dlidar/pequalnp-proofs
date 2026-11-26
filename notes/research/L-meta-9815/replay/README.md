@@ -1,5 +1,7 @@
-# Lean replay of the binary-cache certificates
+# Lean replay of the binary-gate classification
 
-The independent integer verifier in the parent directory has checked all 182 choices. These sources implement a separate Lean replay. The full build and axiom audit were in progress when this checkpoint was recorded. The parent directory's 37 theorems, including the ordinary and complemented-input results, have passed the permitted-axiom audit.
+Pinned Lean 4.36.0 checked the exact minimum decoder size for every one of the 182 choices of AND or OR on distinct inputs. All 251 named theorems passed the audit for `propext`, `Classical.choice`, and `Quot.sound`. The integer verifier in the parent directory checks the certificates independently.
 
-Run `bash check.sh` in this directory with the project's pinned toolchain. The generator recreates the 94 individual certificate modules from the packed integer data. The main conclusion is `exact_per_cache` in `Classification.lean`.
+From a checkout of this branch, run `bash check.sh` in this directory. The generator recreates 94 certificate modules, and the script checks `Classification.lean` and audits the named declarations. The statement for all 182 choices is `exact_per_cache`. The minimum over all choices, allowing repeated operands, is `best_cache_size`.
+
+`Prune.lean` also proves that any collection of auxiliary signals vanishing on every minimal positive input can be replaced simultaneously by false in an exact monotone decoder. This includes all conjunctions of three distinct raw inputs.

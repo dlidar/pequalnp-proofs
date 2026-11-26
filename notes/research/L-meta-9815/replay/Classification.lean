@@ -146,7 +146,7 @@ theorem lift_size (f) : (liftRaw f).leaves=f.leaves := by induction f <;> simp_a
 theorem lift_eval (k : Key) (f) (x) : (liftRaw f).eval (extendsKey k x)=f.eval x := by
   induction f <;> simp_all [liftRaw,Formula.eval,extendsKey,fill]
 theorem exact_per_cache (k : Key) (s : Nat) : (∃ f : Formula (Option EdgeInput),
-    f.leaves≤s ∧ ∀ x,f.eval (extendsKey k x)=target x) ↔ (if usefulKey k then 25 else 26)≤s := by
+    f.leaves ≤ s ∧ ∀ x,f.eval (extendsKey k x)=target x) ↔ (if usefulKey k then 25 else 26) ≤ s := by
   cases h : usefulKey k with
   | false =>
     simp only [Bool.false_eq_true,if_false]

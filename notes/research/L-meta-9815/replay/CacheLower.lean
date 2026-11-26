@@ -204,7 +204,7 @@ theorem raw_cache_bound (andGate : Bool) (a b : EdgeInput)
     funext i
     cases i <;> cases andGate <;> simp [fill,Bool.and_comm,Bool.or_comm]
 theorem best_cache_size (s : Nat) :
-    (∃ g a b, ∃ f : Formula (Option EdgeInput),f.leaves≤s ∧ ∀ x,f.eval (fill g a b x)=target x) ↔ 25≤s := by
+    (∃ g a b, ∃ f : Formula (Option EdgeInput),f.leaves ≤ s ∧ ∀ x,f.eval (fill g a b x)=target x) ↔ 25 ≤ s := by
   constructor
   · rintro ⟨g,a,b,f,le,h⟩
     exact (raw_cache_bound g a b f h).trans le

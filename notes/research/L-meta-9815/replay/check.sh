@@ -14,13 +14,6 @@ lake env bash -euc '
   for m in FormulaMass CachedBase Upper OptimalBase UsefulAll Invert Prune Cert{0..81} CacheLower Strong{0..11} Classification; do
     lean -o "$m.olean" "$m.lean"
   done
-  cat > EndAudit.lean <<EOF
-import Classification
-import Invert
-#print axioms PEqualNP.Research.Cached9815.exact_per_cache
-#print axioms PEqualNP.Research.Cached9815.best_cache_size
-#print axioms PEqualNP.Research.Cached9815.invert_one_bound
-#print axioms PEqualNP.Research.Cached9815.ordinary_optimum
-EOF
-  lean EndAudit.lean
+  lean FullAudit.lean > audit.log
 ' bash "$scratch"
+python3 "$src/check_axioms.py" "$scratch/FullAudit.lean" "$scratch/audit.log"

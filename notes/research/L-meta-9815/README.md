@@ -16,4 +16,6 @@ In each of the 34 useful cases, take the star of a common neighbor and form the 
 
 The independent verifier in `verify.py` checks all integer certificates in `weights.json.gz`. For each test pair it uses one of 19 positive edge inputs and one of 36 maximal independent sets. Each formula leaf identifies a rectangle of pairs distinguished by that literal. The verifier checks every subset of eligible positive rows and sums the positive column totals, giving an upper bound valid for every allowed choice of columns. The signed matrix mass divided by this cap bounds the number of leaves. For a complemented literal, the verifier also bounds its rectangle by the sum of the positive entries over all eligible pairs. Every upper witness for the 34 useful caches is independently tested on all 16,384 inputs.
 
-Run `bash check.sh` from this directory with the project's pinned Lean toolchain. The ordinary formula and complemented-input results also use the generic kernel-checked rectangle argument in `FormulaMass.lean`.
+Pinned Lean 4.36.0 checked this classification and all 251 named research theorems passed the permitted-axiom audit. Run `bash check.sh` here for the independent integer verifier and ordinary and complemented-input Lean bounds. Run `bash replay/check.sh` for the full binary-gate classification and axiom audit.
+
+The unrestricted 24-slot circuit search returned UNKNOWN after twenty minutes. Shared intermediate gates and internal negations remain open.
