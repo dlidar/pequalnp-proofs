@@ -9,3 +9,5 @@ L-meta-18872 asks for a fan-in-two AND/OR/NOT circuit of size at most 42 on the 
 - `design.py` independently checks both circuits on all 32,768 inputs and enumerates all 190 pairs of omitted triangle terms. The best 42-gate two-omission construction misses 708 true inputs and has zero false positives. The other two distances are 732 and 761. `reference.json` and `near.json` use the project's wire numbering, with `null` as the unused second operand of NOT.
 
 The unrestricted 42-gate circuit remains open.
+
+The independent full-truth-table search in `neighbors.py` checks 62,125 alternative single-gate replacements of the displayed approximation, including additional inverters and constants. Six tie the original error of 708 and every other replacement increases it. Starting from the same approximation, `python3 plateau.py 80` expanded 80 circuits reachable by error-preserving gate changes and scored 4,970,000 substitutions. The minimum stayed at 708. Another 131 discovered circuits remained unexpanded at that cutoff.
