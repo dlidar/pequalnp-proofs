@@ -1,0 +1,16 @@
+{
+  "girth": 7,
+  "edges": 36,
+  "maximal_negatives": 506,
+  "full": 49,
+  "template_lengths": {
+    "48": 36
+  },
+  "false_negative_counts": {
+    "3892": 16,
+    "3899": 16,
+    "3951": 4
+  },
+  "candidates_at_viable_slots": 3062650,
+  "boundary_survivors": []
+}
