@@ -1,8 +1,16 @@
 """Sampled exact synthesis for assigned shard 9. Validate every model on 1,024 rows."""
-import fcntl,itertools,json,random,subprocess,time
+import fcntl,itertools,json,os,random,shutil,subprocess,time
 from pathlib import Path
 w=Path(__file__).resolve().parent
-solver=next((w.parent/'lean-runtime/toolchains').glob('*/bin/cadical'))
+def solver_path():
+    explicit = os.environ.get('CADICAL') or shutil.which('cadical')
+    if explicit:
+        return explicit
+    local = next((w.parent/'lean-runtime/toolchains').glob('*/bin/cadical'),None)
+    if local:
+        return str(local)
+    root = subprocess.check_output(['lean','--print-prefix'],text=True).strip()
+    return str(Path(root)/'bin/cadical')
 tri=[(0,1,4),(0,2,5),(0,3,6),(1,2,7),(1,3,8),(2,3,9),(4,5,7),(4,6,8),(5,6,9),(7,8,9)]
 def target(r):
     return any(all(r>>i&1 for i in t) for t in tri)
@@ -72,7 +80,7 @@ def encode(rows,targets,count,limits,fix=None):
     return p,desc
 def solve(p,t):
     with (w/'solver.log').open('w') as f:
-        return subprocess.run([str(solver),'-q','-t',str(t),str(p)],stdout=f).returncode
+        return subprocess.run([solver_path(),'-q','-t',str(t),str(p)],stdout=f).returncode
 def model(desc):
     s={int(x) for line in (w/'solver.log').read_text().splitlines() if line.startswith('v ') for x in line[2:].split()}
     return [(['and','or','not'][next(i for i,x in enumerate(ops) if x in s)],*[next(i for i,x in enumerate(c) if x in s) for c in cs]) for ops,cs in desc]

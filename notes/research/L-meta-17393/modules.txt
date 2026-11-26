@@ -1,1 +1,2 @@
 FormulaMass Circuit FormulaBound BoundTree One OneCertificate Adjacent AdjacentCertificate Disjoint DisjointCertificate
+AdjacentStrong AdjacentStrongCertificate Symmetry Literals Near
