@@ -6,6 +6,8 @@ export LEAN_PATH="$PWD/split:$PWD:${LEAN_PATH:-}"
 lean -o Upper.olean Upper.lean
 lean -o Formulas.olean Formulas.lean
 lean -o ReaderExamples.olean ReaderExamples.lean
+lean -o FactorCriterion.olean FactorCriterion.lean
+lean -o CacheSplits.olean CacheSplits.lean
 python3 formula_profiles.py
 python3 shared_profiles.py
 python3 triple_reader.py
