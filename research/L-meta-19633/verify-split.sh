@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+# Use the project's pinned lake environment. Run in this directory.
+set -eu
+d=$(pwd)
+python3 subdivide.py
+export LEAN_PATH="$d/parts:$d:${LEAN_PATH:-}"
+for mod in Upper Core Groups Coverage Cut; do
+    lean -R "$d" -o "$d/$mod.olean" "$d/$mod.lean"
+done
+while read -r mod; do
+    lean -R "$d/parts" -o "$d/parts/$mod.olean" "$d/parts/$mod.lean"
+done < "$d/parts/order"
+lean -R "$d" -o "$d/Lower.olean" "$d/Lower.lean"
