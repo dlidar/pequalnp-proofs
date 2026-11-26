@@ -1,0 +1,51 @@
+import PEqualNP.Research.Cached3803.Core
+namespace PEqualNP.Research.CachedFlagTerms
+namespace Mode1
+def selected : Array Mask := #[67117057,67239937,75497473,100663297,8194,16386,262146,16777218,16388,32772,524292,33554436,8200,32776,65544,1048584,16400,65552,131088,2097168,32800,131104,262176,4194336,65600,262208,524352,8388672,131200,524416,1048704,16777344,262400,1048832,2097408,33554688,8704,524800,2097664,4194816,17408,1049600,4195328,8389632,34816,2099200,8390656,16779264,69632,4198400,16781312,33558528]
+def separators : List Mask := [70320167,42205848,177472,71846153,88342557]
+def terms : List Mask := [8193,131073,8388609,33554433,8194,16386,262146,16777218,16388,32772,524292,33554436,8200,32776,65544,1048584,16400,65552,131088,2097168,32800,131104,262176,4194336,65600,262208,524352,8388672,131200,524416,1048704,16777344,262400,1048832,2097408,33554688,8704,524800,2097664,4194816,17408,1049600,4195328,8389632,34816,2099200,8390656,16779264,69632,4198400,16781312,33558528]
+def positive : List Mask := [67117057,67239937,75497473,100663297,8194,16386,262146,16777218,16388,32772,524292,33554436,8200,32776,65544,1048584,16400,65552,131088,2097168,32800,131104,262176,4194336,65600,262208,524352,8388672,131200,524416,1048704,16777344,262400,1048832,2097408,33554688,8704,524800,2097664,4194816,17408,1049600,4195328,8389632,34816,2099200,8390656,16779264,69632,4198400,16781312,33558528]
+def negative : List Mask := [70320167,74448967,73465991,72419335,72384595,71860499,72878099,68718611,69796899,68749347,70783011,73433283,70291523,71401859,69305475,67732739,71895299,69768195,88342557,90177613,73662605,86246413,89129045,85197333,72615957,87031909,85000741,86049829,69534853,71633029,84215301,68487685,88604953,84673561,72091673,85999721,84427049,86508585,69750825,73416905,88097097,71583881,69488777,71846153,69997577,67917833,88113489,84968017,84444433,84182545,68456977,67933201,68950033,84951649,70275169,83968801,84477217,67717409,68241953,68704289,71352769,69259457,83936065,68211265,67224449,71387521,67470977,67455617,67424897,69506177,83986177,68442625,6422606,14680206,12714254,10620942,10551462,9503270,11538470,5376070,3280966,12648838,8585990,4393222,1247750,9572870,42467386,46137498,13107482,38275098,44040362,36176938,11014186,39846090,35783754,37881930,4851978,9048330,34212874,2757642,42992178,35129394,9965618,37781714,34636370,38799442,12616082,41976466,8950034,9474578,42009250,35718306,34671138,34147362,35685570,33719874,34736706,1217090,2266178,8487810,33654402,231170,8557314,724226,693506,33754626,12845212,29360412,25428508,21102924,19006540,10752140,25297676,17171980,8786444,2495500,17834100,25174324,26214964,9449524,20980052,5253204,12591508,4466836,8663188,9703956,1325076,18883684,3158116,8462756,2172068,10498212,25232164,16852260,16917828,4335940,2241604,1194052,4270468,339076,2372740,16975620,208132,462340,1448452,408580,25690424,58720824,50857016,42205848,38013080,50595352,34343960,35668200,50348648,52429928,41960104,10506408,25183016,8933672,37767368,16925512,4344136,50464328,33704520,33835656,8671880,8540936,678152,33951240,416264,924680,51380848,50340976,34613360,17311024,8925488,34090032,1587248,4235728,33596624,37759184,16819536,50366032,8434064,33851024,8688272,33827984,308368,570640,801808,35661024,33581280,2126048,34622048,1079392,8471456,92576,8417696,33639072,33631392,601376,555296,4221376,61888,2143424,16942912,185152,177472,162112,1202752,8442752,33885824,670976]
+def row (i : Fin 52) : Mask := selected[i.val]!
+theorem separator_valid : ∀ z ∈ separators, z ∈ negative := by
+  have cert : separators.all (fun z => negative.contains z) = true := by decide +kernel
+  simpa [List.all_eq_true,List.any_eq_true, Bool.or_eq_true, or_iff_not_imp_left, List.mem_finRange] using cert
+theorem selection_valid : ∀ i, row i ∈ positive := by
+  have cert : (List.finRange 52).all (fun i => positive.contains (row i)) = true := by decide +kernel
+  simpa [List.all_eq_true,List.any_eq_true, Bool.or_eq_true, or_iff_not_imp_left, List.mem_finRange] using cert
+set_option maxRecDepth 100000 in
+set_option maxHeartbeats 16000000 in
+theorem separates : ∀ i j : Fin 52, i < j → ∃ z ∈ separators, on (row i &&& row j) z := by
+  have cert : (List.finRange 52).all (fun i => (List.finRange 52).all (fun j => decide (i < j) == false || separators.any (fun z => decide (on (row i &&& row j) z)))) = true := by decide +kernel
+  simpa [List.all_eq_true,List.any_eq_true, Bool.or_eq_true, or_iff_not_imp_left, List.mem_finRange] using cert
+theorem lower {m : ℕ} (ts : Fin m → Mask)
+    (pos : ∀ x ∈ positive, ∃ j, on (ts j) x)
+    (neg : ∀ j z, z ∈ negative → ¬on (ts j) z) : 52 ≤ m :=
+  packing row separators ts separates (fun i => pos _ (selection_valid i))
+    (fun j z hz => neg j z (separator_valid z hz))
+theorem upper_positive : ∀ x ∈ positive, ∃ t ∈ terms, on t x := by
+  have cert : positive.all (fun x => terms.any (fun t => decide (on t x))) = true := by decide +kernel
+  simpa [List.all_eq_true,List.any_eq_true, Bool.or_eq_true, or_iff_not_imp_left, List.mem_finRange] using cert
+set_option maxRecDepth 100000 in
+set_option maxHeartbeats 16000000 in
+theorem upper_negative : ∀ x ∈ negative, ∀ t ∈ terms, ¬on t x := by
+  have cert : negative.all (fun x => terms.all (fun t => !decide (on t x))) = true := by decide +kernel
+  simpa [List.all_eq_true,List.any_eq_true, Bool.or_eq_true, or_iff_not_imp_left, List.mem_finRange] using cert
+theorem upper_count : terms.length = 52 := by decide
+end Mode1
+
+end PEqualNP.Research.CachedFlagTerms
+
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.selected
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.separators
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.terms
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.positive
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.negative
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.row
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.separator_valid
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.selection_valid
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.separates
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.lower
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.upper_positive
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.upper_negative
+#print axioms PEqualNP.Research.CachedFlagTerms.Mode1.upper_count
