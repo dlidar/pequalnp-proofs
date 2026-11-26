@@ -1,0 +1,6 @@
+{
+  "gap": {
+    "id": "L-meta-22815",
+    "statement": "\u2203 C : PEqualNP.CircuitLowerBounds.Circuit, PEqualNP.MetaComplexity.FanInTwo C \u2227 C.size \u2264 5 \u2227 \u2200 i j : Fin 6, C.eval (List.ofFn fun k : Fin 6 => decide (k = i \u2228 k = j)) = (100287 : \u2115).testBit (6 * min i.val j.val + max i.val j.val)"
+  }
+}
