@@ -15,7 +15,7 @@ def pack(dom):
   skip=solve(items[1:]);return take if len(take)>=len(skip) else skip
  return [reps[b] for b in solve(tuple(best))]
 if __name__=='__main__':
- roots=json.loads(Path('work/120/roots.json').read_text());data={}
+ roots=json.loads((Path(__file__).resolve().parent/'roots.json').read_text());data={}
  for k,(n,l,h,a,b) in roots.items():
   m=int(k);lists=[pack(univ^par[m]),pack(par[m])]
   data[k]=lists
@@ -25,4 +25,4 @@ if __name__=='__main__':
  for k,li in data.items():
   v=roots[k];hist[sum(map(len,li))]+=v[0];gap[sum(v[-2:])-sum(map(len,li))]+=v[0]
  print('packing histogram',sorted(hist.items()),'cover gap',sorted(gap.items()))
- Path('work/120/packs.json').write_text(json.dumps(data))
+ (Path(__file__).resolve().parent/'packs.json').write_text(json.dumps(data))

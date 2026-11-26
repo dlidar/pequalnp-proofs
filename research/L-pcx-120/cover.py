@@ -51,5 +51,5 @@ def main():
  for m,(n,l,h,a,b) in results.items():hist[a+b]+=n
  print(len(results),sorted(hist.items()),flush=True)
  print('min',[(m,v) for m,v in results.items() if sum(v[-2:])==min(hist)],flush=True)
- Path('work/120/roots.json').write_text(json.dumps(results))
+ (Path(__file__).resolve().parent/'roots.json').write_text(json.dumps(results))
 if __name__=='__main__':main()
