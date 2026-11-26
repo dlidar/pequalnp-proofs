@@ -22,5 +22,5 @@ def audit(mods,file):
   assert m and (not m[1] or set(re.findall(r'[\w.]+',m[1]))<={'propext','Classical.choice','Quot.sound'}),t
  return len(ts)
 r=audit(names,'ProofAudit')
-for n in ['Upper','Near','Quotient24','EditNear']:r+=audit([n],n+'Audit')
+for n in ['Upper','Near','Quotient24','EditNear','NineWire24','EightWire24']:r+=audit([n],n+'Audit')
 print(r,'public theorems passed')
