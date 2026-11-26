@@ -115,4 +115,29 @@ theorem length_ge {π : List Cl} (h : IsRefutation (PHP 5 4) π) : 89 ≤ π.len
   simp only [Finset.card_singleton] at hn
   omega
 
+
+theorem restrict_axioms {V : Type} [DecidableEq V] {F G : Set (Clause V)} {π}
+    (h : IsDerivation F π) (hp : ∀ c ∈ π, c ∈ F → c ∈ G) : IsDerivation G π := by
+  induction h with
+  | nil => exact .nil
+  | ax _ hc ih =>
+    exact .ax (ih (fun c h => hp c (List.mem_cons_of_mem _ h))) (hp _ (by simp) hc)
+  | res _ hc hd hR ih =>
+    exact .res (ih (fun c h => hp c (List.mem_cons_of_mem _ h))) hc hd hR
+
+theorem all_axioms_occur {π : List Cl} (h : IsRefutation (PHP 5 4) π) :
+    ∀ c ∈ clauses, c ∈ π := by
+  let G : Set Cl := {c | c ∈ π ∧ c ∈ PHP 5 4}
+  have hG : IsDerivation G π := restrict_axioms h.1 (fun c hc hf => ⟨hc,hf⟩)
+  obtain ⟨A,hF,hd,_⟩ := support_bound hG {∅} (by simpa using h.2)
+  intro c hc
+  by_contra e
+  obtain ⟨m,_,_,hm⟩ := critical c hc
+  have ha : ∀ x ∈ A, ClauseSat (val m) x := by
+    intro x hx
+    obtain ⟨hxπ,hxF⟩ := hF x hx
+    exact (agrees_iff ..).mp (hm x (axiom_mem hxF) (fun he => e (he ▸ hxπ)))
+  have := hd (val m) ha ∅ (by simp)
+  simp [ClauseSat] at this
+
 end PEqualNP.Research.PHP54Lower
