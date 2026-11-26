@@ -11,7 +11,7 @@ lake build PEqualNP.Defs
 lake env bash -euc '
   cd "$1"
   export LEAN_PATH="$PWD:${LEAN_PATH:-}"
-  for m in FormulaMass CachedBase Upper OptimalBase UsefulAll Invert Cert{0..81} CacheLower Strong{0..11} Classification; do
+  for m in FormulaMass CachedBase Upper OptimalBase UsefulAll Invert Prune Cert{0..81} CacheLower Strong{0..11} Classification; do
     lean -o "$m.olean" "$m.lean"
   done
   cat > EndAudit.lean <<EOF
