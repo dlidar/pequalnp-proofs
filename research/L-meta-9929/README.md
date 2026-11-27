@@ -17,3 +17,7 @@ These computational exclusions and the local Lean proofs are fork research. The 
 ## Replay
 
 Use the project's pinned Lean 4.36.0 environment with the current directory included in LEAN_PATH. Compile Traces.lean before Paths.lean and Tail.lean. Reference.lean is independent. Compile live.cpp with a C++17 compiler and run the executable with budgets 8 and 9. Run driver_sat.py with cadical on PATH. It uses check_rup.py and writes DIMACS and proof files in the working directory containing the script.
+
+## Inverter count at the optimum
+
+Every optimal 12-gate circuit has exactly three NOT gates and nine binary gates. With two NOTs the sharp nine-slot driver bound and the two gates necessary after the second NOT place that NOT at slot ten, counting from one. The first NOT can occupy any of the nine preceding slots. optimal_inverters.py checks all nine choices. Each corresponding CNF has an independently checked LRAT refutation, even with both Boolean constants available for free. A 43-gate, two-NOT construction is a positive control on all 64 rows. With four or more NOTs, at most eight binary gates remain, already excluded by live.cpp. The three-NOT reference attains twelve.
