@@ -3,6 +3,9 @@ import Decode
 import Grid
 import Code
 import Uniform
+import Sample
+import Short
+import Sharp
 
 #print axioms SpinMass.cut_count
 #print axioms SpinMass.term_factor
@@ -44,3 +47,17 @@ import Uniform
 #print axioms SpinMass.full_distance
 #print axioms SpinMass.cost_triangle
 #print axioms SpinMass.nearest_recovers
+#print axioms SparseSampling.exp_quadratic
+#print axioms SparseSampling.one_step
+#print axioms SparseSampling.good_row
+#print axioms SparseSampling.choose_batch
+#print axioms SparseSampling.sparse_batch
+#print axioms SpinMass.count_models
+#print axioms SpinMass.ind_case
+#print axioms SpinMass.dist_at
+#print axioms SpinMass.distinguish_density
+#print axioms SpinMass.hits_get
+#print axioms SpinMass.short_distance
+#print axioms SpinMass.short_recovers
+#print axioms SpinMass.single_iff
+#print axioms SpinMass.exact_distance
