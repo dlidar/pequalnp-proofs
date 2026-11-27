@@ -21,3 +21,7 @@ The Lean files use the pinned Lean 4.36.0, project commit 624acb3fb2189a78719c26
 ## Shard 63 circuits
 
 OneNot.lean gives an exact 181-gate circuit. OneNotPartial.lean uses 170 gates, misses 13 positive cells and accepts no negative cell. Both use a single NOT gate. For each circuit Lean checks fan-in, size, the qualifying inverter mask, the represented matrix, and the error counts. FinalAudit.lean prints the axioms for those declarations and the 15-product construction.
+
+## Raw leaves without sharing
+
+Any unshared binary formula in the same OR-of-products form needs at least 219 raw leaves, hence at least 218 gates. For any all-positive rectangle on row set U and column set V, the integer weights in `leafweights.json` sum to at most 100,000 times (|U|+|V|). Their total on the positive graph is 21,812,113. Every product covers at most two rectangles, and the sum of their row and column counts is at most the number of raw leaves in its two operands. Summing the rectangle inequalities therefore gives the bound even if products overlap. Run `python check_leaves.py` to verify it with integer arithmetic.
