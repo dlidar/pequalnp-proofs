@@ -1,0 +1,9 @@
+size 1 reached 57 monotone, 9 one-NOT
+size 2 reached 294 monotone, 147 one-NOT
+size 3 reached 1206 monotone, 970 one-NOT
+size 4 reached 3960 monotone, 4500 one-NOT
+size 5 reached 11500 monotone, 16480 one-NOT
+size 6 reached 28640 monotone, 42170 one-NOT
+size 7 reached 57910 monotone, 95640 one-NOT
+size 8 reached 104160 monotone, 160260 one-NOT
+exact one-NOT formula minimum 9 (!((2&8)|((1&(4|5))|(3&(6|(7|8))))))

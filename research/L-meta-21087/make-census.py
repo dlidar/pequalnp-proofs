@@ -40,7 +40,7 @@ s+='''theorem normalized_profile {t : Nat} {S : Finset Sig} (sub : S ⊆ rawInpu
   by_contra hn
   have ng : listedProfiles.contains (t,l) = false := by simpa [l] using hn
   have mem : (t,l) ∈ excludedGroups := by
-    simpa [show ¬ 9 < l.length + t by omega,hsep,ng] using row
+    exact (show (t,l) ∈ listedProfiles ∨ (t,l) ∈ excludedGroups by simpa [show ¬ 9 < l.length + t by omega,hsep] using row).resolve_left hn
   have nog := List.all_eq_true.mp allExcluded (t,l) mem
   simp [hit] at nog
 '''
