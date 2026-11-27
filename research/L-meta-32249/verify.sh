@@ -35,3 +35,6 @@ g++ -O3 -std=c++17 encoder-witness.cpp -o encoder-witness
 python3 assemble-cuts.py
 g++ -O3 -std=c++17 two-cache.cpp -o two-cache
 ./two-cache
+python3 edits.py
+python3 close-circuits.py
+python3 two-repairs.py
