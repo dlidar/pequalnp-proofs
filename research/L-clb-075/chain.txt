@@ -1,0 +1,11 @@
+greatest strict decreases on an increasing valid chain: 8
+disabled-mask ranked-word
+70423 31
+70422 30
+70420 26
+70416 22
+70400 15
+70144 9
+69632 7
+4096 5
+0 3
