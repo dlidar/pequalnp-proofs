@@ -9,7 +9,7 @@ project_path=$(lake env python3 -c 'import os; print(os.pathsep.join(os.path.abs
 lean_bin=$(lake env which lean)
 cd "$here"
 export LEAN_PATH="$here:$project_path"
-for f in FormulaMass CachedBase Rep0 Rep1 Rep2 Rep3 Rep4 Rep5 Transport Upper Reference Exact Audit; do
+for f in FormulaMass CachedBase Rep0 Rep1 Rep2 Rep3 Rep4 Rep5 Transport Upper Reference Exact Erase Audit; do
     "$lean_bin" -o "$f.olean" "$f.lean"
 done
 python3 verify_weights.py

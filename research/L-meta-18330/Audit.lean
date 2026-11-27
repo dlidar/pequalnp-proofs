@@ -1,3 +1,4 @@
+import Erase
 import Reference
 import Exact
 
@@ -38,3 +39,5 @@ import Exact
 #print axioms PEqualNP.Research.Cached18330.cacheProfile
 #print axioms PEqualNP.Research.Cached18330.numberUseful
 #print axioms PEqualNP.Research.Fano.reference27
+#print axioms PEqualNP.Research.FanoErase.pruneEval
+#print axioms PEqualNP.Research.FanoErase.pruneSize

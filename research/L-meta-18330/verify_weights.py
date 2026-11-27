@@ -101,3 +101,61 @@ for x in range(16384):
     fn+=int(target(x) and not w[-1]);fp+=int(not target(x) and w[-1])
 assert (fn,fp)==(68,18)==(approx['fn'],approx['fp'])
 print('25-gate approximation checked on 16384 inputs:',fn,'false negatives and',fp,'false positives')
+
+# The refined profiles pair an integer lower bound with an explicit expression.
+profil=json.loads(gzip.decompress((p/'decoder-profiles.json.gz').read_bytes()))
+assert len(profil)==len(certs)
+truth=[int.from_bytes(bytes(sum(1<<k for k in range(8) if ((8*b+k)>>i)&1) for b in range(2048)),'little') for i in range(14)]
+F=0
+for a,b in edges:F|=truth[a]&truth[b]
+hist=Counter();openreps=[]
+for r,base in zip(profil,certs):
+    assert r['pair']==base['pair'];pair=tuple(tuple(c) for c in r['pair'])
+    signal=truth[:];test=raw[:]
+    for c in pair:
+        op,i,j=c
+        signal.append(signal[i]&signal[j] if op=='and' else signal[i]|signal[j])
+        test.append(trace(c,test))
+    def evaluate(t):
+        if type(t)==int:
+            assert 0<=t<16
+            return signal[t],1
+        op,a,b=t;assert op in ('and','or');x,l=evaluate(a);y,m=evaluate(b)
+        return (x&y if op=='and' else x|y),l+m
+    out=0;leaves=0
+    for t in r['terms']:
+        v,k=evaluate(t);out|=v;leaves+=k
+    assert F==out and leaves==r['upper']
+    if 'weights' in r:assert check(r['weights'],r['cap'],test)==r['lower']
+    else:assert r['lower']==base['lower']
+    assert r['lower']<=leaves
+    orbit={tuple(move(c,g) for c in pair) for g in G}
+    hist[r['lower'],leaves]+=len(orbit)
+    if r['lower']<leaves:openreps.append(pair)
+print('two-gate decoder (lower,upper) frequencies',sorted(hist.items()),'unresolved representatives',len(openreps))
+
+# If a formula of at most 27 leaves omits either auxiliary AND, the other
+# auxiliary AND alone contradicts the one-cache lower bound of 28 leaves.
+# Otherwise fixing both auxiliary AND leaves to false removes at least two
+# leaves. The 19 unaffected positives guarantee a nonconstant surviving
+# formula. Recheck all four ways it could label the two remaining edge rows.
+erased=json.loads(gzip.decompress((p/'erased.json.gz').read_bytes()))
+assert len(erased)==12
+datasets={}
+for r in erased:
+    pair=tuple(tuple(c) for c in r['pair']);tag=r['tag']
+    assert pair in openreps and 0<=tag<4
+    assert all(op=='and' and (a,b) in edges for op,a,b in pair)
+    masks=[1<<a|1<<b for _,a,b in pair]
+    positive=[x for x in P if x not in masks or tag>>masks.index(x)&1]
+    negative=N+[x for i,x in enumerate(masks) if not tag>>i&1]
+    w=r['weights'];cap=r['cap']
+    assert len(w)==len(positive) and all(len(row)==len(negative) for row in w)
+    assert type(cap)==int and cap>0 and all(type(v)==int for row in w for v in row)
+    assert sum(map(sum,w))>25*cap
+    assert all(maximum(w,(atom(positive,i),atom(negative,i)))<=cap for i in range(14))
+    datasets[pair,tag]=True
+assert len(datasets)==12 and all((pair,tag) in datasets for pair in openreps for tag in range(4))
+hist[28,28]+=hist.pop((27,28))
+assert sum(hist.values())==38220
+print('complete exact decoder classification:',sorted(hist.items()))

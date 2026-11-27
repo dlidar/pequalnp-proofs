@@ -27,3 +27,13 @@ The integer verifier considers all 20 monotone truth tables on three bits and ch
 Run `bash verify.sh` from this directory in the fork checkout based on 624acb3fb2189a78719c262c1af407bd73fb3b5c. The script builds the Lean 4.36.0 sources and audits their axioms. It then runs the independent integer checks for two gates and three-input scopes. The unrestricted 25-gate existence question remains open in this research.
 
 The file nearest.json contains a 25-gate approximation with 68 false negatives and 18 false positives across all 16,384 inputs. The independent verifier recomputes each output and checks the gate operands.
+
+## Exact two-gate classification
+
+| Minimum decoder leaves | Ordered two-gate programs |
+|---:|---:|
+| 26 | 798 |
+| 27 | 13,986 |
+| 28 | 23,436 |
+
+For all 260 symmetry representatives, the replay evaluates a matching decoder on all 16,384 inputs. Direct rectangle certificates establish all but three representative lower bounds. In each of the three exceptions, the two cached signals are ANDs for distinct incident pairs. A formula of at most 27 leaves must use both, by the one-cache result. Set both signals to false and simplify. The remaining formula has at most 25 leaves. It still accepts the other 19 flags and rejects every original maximal negative. For each of the four possible labels on the two exceptional flags, a separate integer certificate requires at least 26 remaining leaves. These twelve certificates settle the final 420 ordered programs. Erase.lean gives the generic evaluation and leaf-count properties of simplification. The classification combines these arguments with the independently replayed integer certificates.
