@@ -1,0 +1,4 @@
+(3, 5, 9, 14) orbit 4, gates 12, inputs 256, matching (0, 3, 1, 2), 56 single gates, 4032 ordered pairs, 868 pair orbits
+(3, 5, 10, 12) orbit 3, gates 11, inputs 256, matching (0, 2, 1, 3), 56 single gates, 4032 ordered pairs, 560 pair orbits
+(3, 5, 6, 9, 10) orbit 6, gates 13, inputs 512, matching (0, 2, 1, 3), 72 single gates, 6480 ordered pairs, 1748 pair orbits
+(3, 5, 6, 9, 10, 12) orbit 1, gates 15, inputs 1024, matching (0, 2, 1, 3), 90 single gates, 9900 ordered pairs, 548 pair orbits
