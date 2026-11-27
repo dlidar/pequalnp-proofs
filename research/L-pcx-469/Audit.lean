@@ -12,6 +12,16 @@ import Transport
 import LocalFit
 import Combine
 import Design
+import Machine
+import Gadgets
+import Threshold
+import LogicGates
+import Payload
+import CompilePrice
+import Winners
+import Sizes
+import Pack
+import Finish
 
 #print axioms SpinMass.cut_count
 #print axioms SpinMass.term_factor
@@ -94,3 +104,56 @@ import Design
 #print axioms SpinHash.log_colors
 #print axioms SpinHash.query_budget
 #print axioms SpinHash.local_design
+#print axioms SpinCircuit.run_append
+#print axioms SpinCircuit.extends_run
+#print axioms SpinCircuit.run_length
+#print axioms SpinCircuit.old_wire
+#print axioms SpinCircuit.legal_append
+#print axioms SpinCircuit.circuit_legal
+#print axioms SpinCircuit.weaken
+#print axioms SpinCircuit.read_input
+#print axioms SpinCircuit.many
+#print axioms SpinCircuit.indexed
+#print axioms SpinCircuit.cell_legal
+#print axioms SpinCircuit.cell_eval
+#print axioms SpinCircuit.cell_built
+#print axioms SpinCircuit.unary
+#print axioms SpinCircuit.constant
+#print axioms SpinCircuit.bool_not
+#print axioms SpinCircuit.threshold
+#print axioms SpinCircuit.lift_level
+#print axioms SpinCircuit.level_const
+#print axioms SpinCircuit.level_not
+#print axioms SpinCircuit.level_threshold
+#print axioms SpinCircuit.of_bool
+#print axioms SpinCircuit.to_bool
+#print axioms SpinCircuit.gate_const
+#print axioms SpinCircuit.gate_not
+#print axioms SpinCircuit.gate_lift
+#print axioms SpinCircuit.gate_congr
+#print axioms SpinCircuit.gate_card
+#print axioms SpinCircuit.gate_all
+#print axioms SpinCircuit.gate_and
+#print axioms SpinCircuit.packet_layout
+#print axioms SpinCircuit.bit_gate
+#print axioms SpinCircuit.bit_match
+#print axioms SpinCircuit.present_gate
+#print axioms SpinCircuit.matches_constant
+#print axioms SpinCircuit.test_scaled
+#print axioms SpinCircuit.cost_bit
+#print axioms SpinCircuit.cost_cut
+#print axioms SpinCircuit.price_cut
+#print axioms SpinCircuit.card_lt
+#print axioms SpinCircuit.total_as_card
+#print axioms SpinCircuit.total_cut
+#print axioms SpinCircuit.price_total_cap
+#print axioms SpinCircuit.score_le_gate
+#print axioms SpinCircuit.winner_gate
+#print axioms SpinCircuit.realizes
+#print axioms SpinHash.parameter_bounds
+#print axioms SpinHash.final_size
+#print axioms SpinCircuit.flat_sum
+#print axioms SpinCircuit.lost_rows
+#print axioms SpinCircuit.error_rows
+#print axioms SpinCircuit.winning_value
+#print axioms SpinSolution.assembled

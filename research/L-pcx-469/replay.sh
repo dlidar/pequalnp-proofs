@@ -6,7 +6,7 @@ export PATH="$(cd "$project_lean" && lake env lean --print-prefix)/bin:$PATH"
 export LEAN_PATH="$source_dir:$(cd "$project_lean" && lake env printenv LEAN_PATH)"
 cd "$source_dir"
 lean --version
-for module in Mass Decode Grid Code Uniform Sample Short Sharp Hash Project Transport LocalFit Combine Design; do
+for module in Mass Decode Grid Code Uniform Sample Short Sharp Hash Project Transport LocalFit Combine Design Machine Gadgets Threshold LogicGates Payload CompilePrice Winners Sizes Pack Finish; do
   lean -o "$module.olean" "$module.lean"
 done
 lean Audit.lean
