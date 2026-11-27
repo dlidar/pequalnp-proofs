@@ -17,5 +17,21 @@ python3 cutwidth.py
 python3 cutcert.py
 python3 check-cuts.py
 python3 gen-balanced.py
-for f in Reference Graph FormulaTree Witness Cut Four; do "$lean_bin" -o "$f.olean" "$f.lean"; done
+for f in Reference Graph FormulaTree Witness Inverter Cut Four Both Examples; do "$lean_bin" -o "$f.olean" "$f.lean"; done
 for f in Cut[0-9]*.lean; do "$lean_bin" -o "${f%.lean}.olean" "$f"; done
+
+python3 gen-total.py
+"$lean_bin" -o Total.olean Total.lean
+python3 balanced.py
+g++ -O3 -std=c++17 five-dp.cpp -o five-dp
+./five-dp > five-costs
+python3 decoder-cost.py
+g++ -O3 -std=c++17 decoder-circuits.cpp -o decoder-circuits
+./decoder-circuits > decoder-tables
+python3 circuit-prices.py
+g++ -O3 -std=c++17 encoders.cpp -o encoders
+./encoders 7 < encoder-queries.txt > encoder-prices.txt
+g++ -O3 -std=c++17 encoder-witness.cpp -o encoder-witness
+python3 assemble-cuts.py
+g++ -O3 -std=c++17 two-cache.cpp -o two-cache
+./two-cache
