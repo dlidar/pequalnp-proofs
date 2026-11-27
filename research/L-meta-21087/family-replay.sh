@@ -33,3 +33,7 @@ for f in Support Family CloneUpper Restrict ClonePin CloneLift CloneCosts; do
 done
 lean -R "$root/unrestricted" -o "$build/Lower.olean" "$root/unrestricted/Lower.lean"
 lean -R "$root" -o "$build/CloneExact.olean" "$root/CloneExact.lean"
+lean -R "$root/core3" -o "$build/CoreLower.olean" "$root/core3/CoreLower.lean"
+for f in Permute Upper Structural CloneFinal; do
+  lean -R "$root" -o "$build/$f.olean" "$root/$f.lean"
+done
