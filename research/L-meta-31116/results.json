@@ -1,0 +1,22 @@
+{
+  "problem": "L-meta-31116",
+  "monotone_optimum": 14,
+  "monotone_13": [
+    "UNSAT 13 nodes 63766463 root moves 65",
+    "UNSAT 13 nodes 63766209 pruned 3459267653"
+  ],
+  "one_not_global_search": "UNKNOWN",
+  "inverter_ancestor_exclusions": {
+    "0": 8,
+    "1": 56,
+    "2": 672,
+    "3": 10416,
+    "4": 188832,
+    "5": 3908352,
+    "6": 89692512
+  },
+  "kernel_declarations": 42,
+  "six_gate_confirmation": "complete depth 6 prefixes 89692512 support exclusions 69517317 decoder searches 20175195 candidates 0",
+  "five_gate_confirmation": "complete depth 5 prefixes 3908352 support exclusions 1409887 decoder searches 2498465 candidates 0",
+  "four_gate_confirmation": "verified 188832 problems, 0 candidates; 18555222 admitted states"
+}

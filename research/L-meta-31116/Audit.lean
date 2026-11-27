@@ -5,6 +5,9 @@ import Merge
 import Features
 import Alternation
 import Late
+import RawOpening
+import Compare
+import Posted
 #print axioms Graph31116.exact14
 #print axioms Graph31116.monotone_gates
 #print axioms Graph31116.computes
@@ -40,3 +43,10 @@ import Late
 #print axioms Graph31116.endpoints
 #print axioms Graph31116.final_and
 #print axioms Graph31116.final_or
+#print axioms Graph31116.idem_replace
+#print axioms Graph31116.arbitrary_decoder
+#print axioms Graph31116.computed_list
+#print axioms Graph31116.admissible_first_read
+#print axioms Graph31116.finite_saving
+#print axioms Graph31116.if_monotone_lower
+#print axioms Graph31116.posted_iff

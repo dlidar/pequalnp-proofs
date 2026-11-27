@@ -7,7 +7,7 @@ dir=$PWD
 (cd "$LEAN_PROJECT" && lake env lean --version)
 export LEAN_PATH="$dir:$(cd "$LEAN_PROJECT" && lake env printenv LEAN_PATH)"
 compiler=$(cd "$LEAN_PROJECT" && lake env which lean)
-for m in Reference Universal Boundary Merge Features Alternation Late Audit; do "$compiler" -o "$m.olean" "$m.lean"; done
+for m in Reference Universal Boundary Merge Features Alternation Late RawOpening Compare Posted Audit; do "$compiler" -o "$m.olean" "$m.lean"; done
 g++ -std=c++17 -O3 profiles.cpp -o profiles
 ./profiles mono.bin
 g++ -std=c++17 -O3 verify-prices.cpp -o verify-prices

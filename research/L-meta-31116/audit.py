@@ -1,6 +1,6 @@
 from pathlib import Path
 import re
-mods=['Reference','Universal','Boundary','Merge','Features','Alternation','Late']
+mods=['Reference','Universal','Boundary','Merge','Features','Alternation','Late','RawOpening','Compare','Posted']
 out=['import '+m for m in mods]
 for m in mods:
  ns=''
