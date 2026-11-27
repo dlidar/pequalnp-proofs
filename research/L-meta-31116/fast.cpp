@@ -51,6 +51,7 @@ bool walk(vector<U> const&w,int k,vector<Set>&memo,int level){
  }
  if(n>=2 && level>0)memo[k].insert(State{w});return false;
 }
+#ifndef BATCH_FRONTIERS
 int main(int argc,char**argv){
  if(argc!=3)return 2;
  ifstream f(argv[1]);int count;f>>npos>>nneg>>count;
@@ -70,3 +71,5 @@ int main(int argc,char**argv){
  }
  cout<<"UNSAT "<<k<<" nodes "<<visited<<" root moves "<<rootcount<<endl;
 }
+
+#endif

@@ -3,6 +3,8 @@ import Universal
 import Boundary
 import Merge
 import Features
+import Alternation
+import Late
 #print axioms Graph31116.exact14
 #print axioms Graph31116.monotone_gates
 #print axioms Graph31116.computes
@@ -29,3 +31,12 @@ import Features
 #print axioms WireMerge.or_keep_right
 #print axioms Graph31116.obstruction
 #print axioms Graph31116.every_raw_is_needed
+#print axioms InverterRepair.reversal_forces
+#print axioms InverterRepair.marked
+#print axioms InverterRepair.mark_mono
+#print axioms InverterRepair.decodes
+#print axioms InverterRepair.decodeMarked_mono
+#print axioms InverterRepair.one_inverter_iff
+#print axioms Graph31116.endpoints
+#print axioms Graph31116.final_and
+#print axioms Graph31116.final_or
