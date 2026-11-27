@@ -1,0 +1,26 @@
+import Attain
+#print axioms FieldCoverage.span_points
+#print axioms FieldCoverage.readings_injective
+#print axioms FieldCoverage.matrix_rank
+#print axioms FieldCoverage.extension_rank
+#print axioms FieldCoverage.fits_iff
+#print axioms FieldCoverage.b2z_test
+#print axioms FieldCoverage.anchor_label
+#print axioms FieldCoverage.fits_label
+#print axioms FieldCoverage.label_add
+#print axioms FieldCoverage.rank_cutoff
+#print axioms FieldCoverage.fits_singular
+#print axioms FieldCoverage.rank_one_cost
+#print axioms FieldCoverage.oneTable_apply
+#print axioms FieldCoverage.oneTable_rank
+#print axioms FieldCoverage.singular_iff_slope
+#print axioms FieldCoverage.singular_oneTable
+#print axioms FieldCoverage.covers_reciprocal_hyperplane
+#print axioms FieldCoverage.level_surjective
+#print axioms FieldCoverage.level_eq
+#print axioms FieldCoverage.box_member
+#print axioms FieldCoverage.box_count
+#print axioms FieldCoverage.box_family
+#print axioms FieldCoverage.level_totals
+#print axioms FieldCoverage.allocate
+#print axioms FieldCoverage.exact_attainment
