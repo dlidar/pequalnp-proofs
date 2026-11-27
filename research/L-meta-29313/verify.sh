@@ -17,6 +17,8 @@ python3 budget.py
 g++ -O3 -std=c++17 small-decoder.cpp -o smalldec
 python3 pinning.py
 python3 recheck-packs.py
+python3 partition-trace.py
+python3 check-partition.py
 python3 checkweights.py
 python3 rawcerts.py
 python3 splitcert.py

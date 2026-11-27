@@ -38,6 +38,16 @@ for j in [6,7]:
         (p/(mod+'.lean')).write_text(pre+'set_option maxRecDepth 16000\nset_option maxHeartbeats 4000000\ntheorem chunk'+str(j)+'_'+str(num)+' : '+prop+' := by decide +kernel\n'+end)
         order.append(mod);imports.append('import '+mod)
         proof.append(f'  · exact chunk{j}_{num}')
-    (p/f'Cert3Test{j}.lean').write_text('\n'.join(imports)+'\nimport SplitRows\n'+pre.removeprefix('import Cert3Base\n')+f'theorem test{j} : tests {j} := by\n  unfold tests\n  apply split_rows {bits[0]} <;> apply split_rows {bits[1]} <;> apply split_rows {bits[2]}\n'+'\n'.join(proof)+'\n'+end)
+    def tree(k,U,opts):
+        if k==3:return f'chunk{j}_'+str(sum(v<<(2-z) for z,v in enumerate(opts)))
+        expr='s'
+        for n,flag in reversed(list(zip(bits,opts))):
+            if flag:expr=f'(insert {n} {expr})'
+        pred=f'(fun s : Finset (Fin 10) => (∑ k∈univ.filter (fun k => enc (bits (P k)) 3 ({j} : Fin 9)=true), max 0 (∑ z∈{expr}, w k z)) ≤ cap)'
+        nxt=f'({U}.erase {bits[k]})'
+        return f'(split_rows (U := {U}) (Q := {pred}) {bits[k]} '+tree(k+1,nxt,opts+[0])+' '+tree(k+1,nxt,opts+[1])+')'
+    U=f'(univ.filter (fun k => enc (bits (N k)) 3 ({j} : Fin 9)=false))'
+    src='\n'.join(imports)+'\nimport SplitRows\n'+pre.removeprefix('import Cert3Base\n')+f'theorem test{j} : tests {j} :=\n  '+tree(0,U,[])+'\n'+end
+    (p/f'Cert3Test{j}.lean').write_text(src)
     order.append(f'Cert3Test{j}')
 (p/'chunk-order').write_text('\n'.join(order)+'\n')
