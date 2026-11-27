@@ -1,0 +1,43 @@
+import Result
+import Sharp
+import Reference
+#print axioms PEqualNP.Research.Permanent27300.foldl_snoc_keeps
+#print axioms PEqualNP.Research.Permanent27300.foldl_snoc_length
+#print axioms PEqualNP.Research.Permanent27300.getD_of_initial
+#print axioms PEqualNP.Research.Permanent27300.foldl_snoc_split
+#print axioms PEqualNP.Research.Permanent27300.wires_length
+#print axioms PEqualNP.Research.Permanent27300.wires_low
+#print axioms PEqualNP.Research.Permanent27300.wires_past
+#print axioms PEqualNP.Research.Permanent27300.wires_gate
+#print axioms PEqualNP.Research.Permanent27300.insensitivity
+#print axioms PEqualNP.Research.Permanent27300.initial_rows
+#print axioms PEqualNP.Research.Permanent27300.flips
+#print axioms PEqualNP.Research.Permanent27300.early_eval
+#print axioms PEqualNP.Research.Permanent27300.raw_coverage
+#print axioms PEqualNP.Research.Permanent27300.legal_bounds
+#print axioms PEqualNP.Research.Permanent27300.tail_legal
+#print axioms PEqualNP.Research.Permanent27300.backward
+#print axioms PEqualNP.Research.Permanent27300.wire_perm
+#print axioms PEqualNP.Research.Permanent27300.balance_aux
+#print axioms PEqualNP.Research.Permanent27300.output_budget
+#print axioms PEqualNP.Research.Permanent27300.signature_bit
+#print axioms PEqualNP.Research.Permanent27300.sig_and
+#print axioms PEqualNP.Research.Permanent27300.sig_or
+#print axioms PEqualNP.Research.Permanent27300.sig_not
+#print axioms PEqualNP.Research.Permanent27300.input_length
+#print axioms PEqualNP.Research.Permanent27300.input_price
+#print axioms PEqualNP.Research.Permanent27300.step_price
+#print axioms PEqualNP.Research.Permanent27300.conditional_impossible
+#print axioms PEqualNP.Research.Permanent27300.cap
+#print axioms PEqualNP.Research.Permanent27300.listed
+#print axioms PEqualNP.Research.Permanent27300.cheaper
+#print axioms PEqualNP.Research.Permanent27300.combine
+#print axioms PEqualNP.Research.Permanent27300.complement
+#print axioms PEqualNP.Research.Permanent27300.exact_negation
+#print axioms PEqualNP.Research.Permanent27300.port_bound
+#print axioms PEqualNP.Research.Permanent27300.binary_perm
+#print axioms PEqualNP.Research.Permanent27300.ten_later_binary_impossible
+#print axioms PEqualNP.Research.Permanent27300.nonconstant19
+#print axioms PEqualNP.Research.Permanent27300.distinct19
+#print axioms PEqualNP.Research.Permanent27300.nineteen
+#print axioms PEqualNP.Research.Permanent27300.thirteen_binary
