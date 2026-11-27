@@ -6,6 +6,12 @@ import Uniform
 import Sample
 import Short
 import Sharp
+import Hash
+import Project
+import Transport
+import LocalFit
+import Combine
+import Design
 
 #print axioms SpinMass.cut_count
 #print axioms SpinMass.term_factor
@@ -61,3 +67,30 @@ import Sharp
 #print axioms SpinMass.short_recovers
 #print axioms SpinMass.single_iff
 #print axioms SpinMass.exact_distance
+#print axioms SpinHash.moment
+#print axioms SpinHash.prod_multiplier
+#print axioms SpinHash.multiplicative_bound
+#print axioms SpinHash.hash_family
+#print axioms SpinHash.ordered_swap
+#print axioms SpinHash.ordered_some
+#print axioms SpinHash.critical_size
+#print axioms SpinHash.guard_mem
+#print axioms SpinHash.ordered_eq
+#print axioms SpinHash.project_preserves
+#print axioms SpinHash.tag_project
+#print axioms SpinHash.common_pos
+#print axioms SpinHash.scaled
+#print axioms SpinHash.prediction_exact
+#print axioms SpinHash.prediction_eq_iff
+#print axioms SpinHash.failure_bound
+#print axioms SpinHash.protected_count
+#print axioms SpinHash.cost_scaled
+#print axioms SpinHash.erasures_scaled
+#print axioms SpinHash.cost_cap
+#print axioms SpinHash.price_cap
+#print axioms SpinHash.price_true
+#print axioms SpinHash.price_false
+#print axioms SpinHash.aggregate
+#print axioms SpinHash.log_colors
+#print axioms SpinHash.query_budget
+#print axioms SpinHash.local_design
