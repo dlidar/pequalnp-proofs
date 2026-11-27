@@ -1,0 +1,94 @@
+[
+  {
+    "coordinates": 0,
+    "monotone_functions": 2,
+    "histogram": {
+      "0": 2
+    },
+    "worst": 0,
+    "example": {
+      "Z": [],
+      "O": [
+        0
+      ]
+    }
+  },
+  {
+    "coordinates": 1,
+    "monotone_functions": 3,
+    "histogram": {
+      "0": 4
+    },
+    "worst": 0,
+    "example": {
+      "Z": [],
+      "O": [
+        0,
+        1
+      ]
+    }
+  },
+  {
+    "coordinates": 2,
+    "monotone_functions": 6,
+    "histogram": {
+      "0": 14,
+      "1": 2
+    },
+    "worst": 1,
+    "example": {
+      "Z": [
+        1
+      ],
+      "O": [
+        2
+      ]
+    }
+  },
+  {
+    "coordinates": 3,
+    "monotone_functions": 20,
+    "histogram": {
+      "0": 232,
+      "2": 9,
+      "1": 15
+    },
+    "worst": 2,
+    "example": {
+      "Z": [
+        1
+      ],
+      "O": [
+        2,
+        4,
+        6
+      ]
+    }
+  },
+  {
+    "coordinates": 4,
+    "monotone_functions": 168,
+    "histogram": {
+      "0": 62978,
+      "3": 344,
+      "2": 1776,
+      "1": 412,
+      "5": 20,
+      "4": 6
+    },
+    "worst": 5,
+    "example": {
+      "Z": [
+        3,
+        5,
+        9
+      ],
+      "O": [
+        6,
+        10,
+        12,
+        14
+      ]
+    }
+  }
+]
