@@ -17,6 +17,9 @@ python3 budget.py
 g++ -O3 -std=c++17 small-decoder.cpp -o smalldec
 python3 pinning.py
 python3 recheck-packs.py
+python3 one-share.py
+g++ -O3 -std=c++17 one-share-check.cpp -o one-share-check
+./one-share-check
 python3 partition-trace.py
 python3 check-partition.py
 python3 checkweights.py
@@ -24,6 +27,6 @@ python3 rawcerts.py
 python3 splitcert.py
 python3 chunkcert.py
 mapfile -t powerset_modules < chunk-order
-mods=(FormulaMass Bridge Context Leaves Convert Three Triple Realize Reference Graph Restrict Witness Signed FormulaTree Cert{0..2} Cert3Base Cert3Test{0..5} "${powerset_modules[@]}" Cert3Test8 Cert{3..7} Result)
+mods=(FormulaMass Bridge Context Leaves Convert Three Triple Realize Reference Graph Restrict CachePin Witness Signed FormulaTree Cert{0..2} Cert3Base Cert3Test{0..5} "${powerset_modules[@]}" Cert3Test8 Cert{3..7} Result)
 for m in "${mods[@]}"; do "$lean_bin" -o "$m.olean" "$m.lean"; done
 for mod in "${mods[@]}"; do python3 audit.py "$mod"; "$lean_bin" Audit.lean; done
